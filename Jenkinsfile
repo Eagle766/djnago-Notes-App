@@ -40,7 +40,11 @@ pipeline{
                      echo "This is  deploying the code"
                     //sh "docker run -d -p 8000:8000 notes-app:latest"
                     
-                    sh " docker compose down && docker compose up -d"
+                    sh '''
+        docker compose down --volumes --remove-orphans || true
+        docker system prune -f || true
+        docker compose up -d --build --force-recreate
+        '''
              }
             
         }
